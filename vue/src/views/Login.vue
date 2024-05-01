@@ -26,6 +26,7 @@
 import {reactive,ref} from "vue";
 import request from "@/utils/request";
 import {ElMessage} from "element-plus";
+import router from "@/router";
 
 const data=reactive({
   form: {}
@@ -46,14 +47,14 @@ const login=()=>{
   formRef.value.validate((valid)=>{
     if(valid){
       request.post("/login",data.form).then(res=>{
-        if(res.code='200'){
+        if(res.code==='200'){
           localStorage.setItem('student-user',JSON.stringify(res.data))
           ElMessage.success("登录成功")
-          location.href='/home'  //跳转到主页
+          console.log(res.data)
+          router.push('/home')  //跳转到主页
         }else{
           ElMessage.error(res.msg)
         }
-
       })
     }
   })
