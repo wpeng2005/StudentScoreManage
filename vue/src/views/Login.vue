@@ -1,17 +1,52 @@
 <template>
   <div>
-  <div style="min-height: 100vh; overflow: hidden; display:flex">
-    <div style="width: 350px">
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="活动名称">
-          <el-input v-model="form.name"></el-input>
+  <div class="login-container"  >
+    <div style="width: 350px" class="login-box">
+      <div style="font-weight: bold;font-size: 24px;text-align: center;margin-bottom: 30px">登录</div>
+      <el-form ref="form" :model="data.form">
+        <el-form-item >
+          <el-input prefix-icon="User" v-model="data.form.username" placeholder="请输入账号"/>
+        </el-form-item>
+        <el-form-item >
+          <el-input prefix-icon="Lock" v-model="data.form.password" placeholder="请输入密码"/>
+        </el-form-item>
+        <el-form-item >
+        <el-button type="primary" style="width: 100%">登录</el-button>
         </el-form-item>
         </el-form>
+      <div style="margin-top: 30px;text-align: center">
+        还没有账号?请<a href="/register">注册</a>
+      </div>
     </div>
 
   </div>
   </div>
 </template>
 <script setup>
+import {reactive} from "vue";
 
+const data=reactive({
+  form: {}
+  })
 </script>
+
+<style scoped>
+.login-container{
+min-height: 100vh;
+  overflow: hidden;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("@/assets/imgs/bg.jpg");
+  background-size: cover;
+
+}
+.login-box{
+  background-color: rgba(255,255,255,.8);
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+  padding: 30px;
+  border-radius: 5px;
+  /*border: 1px solid #ddd;*/
+}
+
+</style>
