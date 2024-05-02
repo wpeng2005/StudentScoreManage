@@ -92,9 +92,11 @@
 <template>
   <div>
     <div class="card" style="margin-bottom: 10px">
-      <el-input style="width: 260px" placeholder="请输入课程名称查询" :prefix-icon="Search" v-model="data.name"/>
-      <el-button type="primary" style="margin-left: 10px">查询</el-button>
-      <el-button type="info">重置</el-button>
+      <el-input style="width: 260px;margin-right: 10px" placeholder="请输入课程名称查询" :prefix-icon="Search" v-model="data.name"/>
+      <el-input style="width: 260px;margin-right: 10px" placeholder="请输入课程编号查询" :prefix-icon="Search" v-model="data.no"/>
+      <el-input style="width: 260px" placeholder="请输入任课老师查询" :prefix-icon="Search" v-model="data.teacher"/>
+      <el-button type="primary" style="margin-left: 10px" @click="load">查询</el-button>
+      <el-button type="info" @click="reset">重置</el-button>
     </div>
     <div class="card" style="margin-bottom: 10px">
       <div style="margin-bottom: 10px">
@@ -131,17 +133,22 @@ import request from "@/utils/request";
 
 const data=reactive({
   name:'',
+  no:'',
+  teacher:'',
   tableData:[],
    total:0,
-    pageSize:1,
-    pageNum:1
+    pageSize:5,   //每页的个数
+    pageNum:1     //当前的页码
 })
 
 const load=()=>{
     request.get("/course/selectPage",{
         params:{
             pageNum:data.pageNum,
-            pageSize:data.pageSize
+            pageSize:data.pageSize,
+            name:data.name,
+            no:data.no,
+            teacher:data.teacher
         }
     }).then(res=>{
         data.tableData=res.data?.list||[]
@@ -154,6 +161,13 @@ load()
 
 const handleCurrentChange=()=>{
     //当翻页的时候，重新加载数据即可
+    load()
+}
+
+const reset=()=>{
+    data.name=''
+    data.teacher=''
+    data.no=''
     load()
 }
 </script>
