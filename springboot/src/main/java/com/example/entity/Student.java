@@ -17,5 +17,6 @@ public class Student extends Account{
     private String  birth;
     private String  avatar;
     private String  sex;
+    private String role;
 
 }

@@ -28,7 +28,7 @@ public class CourseController {
     }
 
     @PutMapping("/update")
-    public Result put(@RequestBody Course course){
+    public Result update(@RequestBody Course course){
         courseService.updateById(course);
         return Result.success();
     }
