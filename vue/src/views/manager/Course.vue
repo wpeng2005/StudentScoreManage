@@ -100,7 +100,7 @@
     </div>
     <div class="card" style="margin-bottom: 10px">
       <div style="margin-bottom: 10px">
-        <el-button type="primary">新增</el-button>
+        <el-button type="primary" @click="handleAdd">新增</el-button>
       </div>
       <div>
         <el-table :data="data.tableData" style="width: 100%">
@@ -112,7 +112,7 @@
           <el-table-column prop="teacher" label="任课老师"/>
           <el-table-column>
             <template #default="scope">
-                <el-button type="primary" plain>编辑</el-button>
+                <el-button type="primary" plain @click="handleEdit(scope.row)">编辑</el-button>
                 <el-button type="danger" plain>删除</el-button>
             </template>
           </el-table-column>
@@ -124,6 +124,30 @@
                      @current-change="handleCurrentChange"
                      background layout="prev, pager, next" :total="data.total"/>
     </div>
+      <el-dialog width="35%" title="课程信息" v-model="data.formVisible">
+          <el-form :model="data.form" label-width="100px" label-position="right" style="padding-right: 40px">
+              <el-form-item label="课程名称" >
+                  <el-input v-model="data.form.name" autocomplete="off"/>
+              </el-form-item>
+              <el-form-item label="课程编号" >
+                  <el-input v-model="data.form.no" autocomplete="off"/>
+              </el-form-item>
+              <el-form-item label="课程描述" >
+                  <el-input v-model="data.form.descr" autocomplete="off"/>
+              </el-form-item>
+              <el-form-item label="课时" >
+                  <el-input v-model="data.form.times" autocomplete="off"/>
+              </el-form-item>
+              <el-form-item label="任课老师" >
+                  <el-input v-model="data.form.teacher" autocomplete="off"/>
+              </el-form-item>
+          </el-form>
+
+          <div slot="footer" class="dialog-footer" style="text-align: right;margin-top: 50px">
+              <el-button @click="data.formVisible = false">取 消</el-button>
+              <el-button type="primary" @click="save">保 存</el-button>
+          </div>
+      </el-dialog>
   </div>
 </template>
 <script setup>
@@ -137,6 +161,8 @@ const data=reactive({
   teacher:'',
   tableData:[],
    total:0,
+    formVisible:false,
+    form:{},
     pageSize:5,   //每页的个数
     pageNum:1     //当前的页码
 })
@@ -170,4 +196,32 @@ const reset=()=>{
     data.no=''
     load()
 }
+
+const handleAdd=()=>{
+    data.form={}
+    data.formVisible=true
+
+}
+//保存数据到后台
+const save=()=>{
+    request.request({
+        url:data.form.id?'/course/update':'/course/add',
+        method:data.form.id?'PUT':'POST',
+        data:data.form
+    }).then(res=>{
+        if(res.code==='200'){
+            load()  //重新获取数据
+            data.formVisible=false //关闭弹窗
+            ElMessage.success("操作成功")
+        }else {
+          ElMessage.error(res.msg)
+        }
+    })
+}
+
+const handleEdit=(row)=>{
+    data.form=JSON.parse(JSON.stringify(row))
+    data.formVisible=true
+}
+
 </script>
