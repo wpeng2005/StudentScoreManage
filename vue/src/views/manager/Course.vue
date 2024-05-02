@@ -113,7 +113,7 @@
           <el-table-column>
             <template #default="scope">
                 <el-button type="primary" plain @click="handleEdit(scope.row)">编辑</el-button>
-                <el-button type="danger" plain>删除</el-button>
+                <el-button type="danger" plain @click="del(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -154,6 +154,7 @@
 import {Search} from "@element-plus/icons-vue";
 import {reactive} from "vue";
 import request from "@/utils/request";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 const data=reactive({
   name:'',
@@ -222,6 +223,19 @@ const save=()=>{
 const handleEdit=(row)=>{
     data.form=JSON.parse(JSON.stringify(row))
     data.formVisible=true
+}
+
+const del=(id)=>{
+    ElMessageBox.confirm('删除数据后无法恢复，您确认删除吗？','删除确认',{type:'warning'}).then(res=>{
+        request.delete("/course/delete/"+id).then(res=>{
+            if(res.code==='200'){
+                load()
+                ElMessage.success("操作成功")
+            }else{
+                ElMessage.error(res.msg)
+            }
+        })
+    }).catch(res=>{})
 }
 
 </script>

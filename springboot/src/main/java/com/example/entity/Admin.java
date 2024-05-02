@@ -3,7 +3,7 @@ package com.example.entity;
 import lombok.Data;
 
 @Data
-public class Admin {
+public class Admin  extends Account{
     private Integer id;
     private String username;
     private String password;
