@@ -8,9 +8,6 @@
       <el-button type="info" @click="reset">重置</el-button>
     </div>
     <div class="card" style="margin-bottom: 10px">
-      <div style="margin-bottom: 10px">
-        <el-button type="primary" @click="handleAdd">新增</el-button>
-      </div>
       <div>
         <el-table :data="data.tableData" style="width: 100%">
           <el-table-column prop="id" label="序号" width="70"/>
@@ -21,8 +18,7 @@
           <el-table-column prop="teacher" label="任课老师"/>
           <el-table-column width="180" label="操作">
             <template #default="scope">
-                <el-button type="primary" plain @click="handleEdit(scope.row)">编辑</el-button>
-                <el-button type="danger" plain @click="del(scope.row.id)">删除</el-button>
+
             </template>
           </el-table-column>
         </el-table>
