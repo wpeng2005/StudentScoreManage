@@ -110,7 +110,7 @@
           <el-table-column prop="descr" label="课程描述"/>
           <el-table-column prop="times" label="时间"/>
           <el-table-column prop="teacher" label="任课老师"/>
-          <el-table-column>
+          <el-table-column width="180" label="操作">
             <template #default="scope">
                 <el-button type="primary" plain @click="handleEdit(scope.row)">编辑</el-button>
                 <el-button type="danger" plain @click="del(scope.row.id)">删除</el-button>

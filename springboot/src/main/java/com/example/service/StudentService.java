@@ -32,13 +32,6 @@ public class StudentService {
         //两个条件都满足，说明登录成功
         return dbStudent;
     }
-    //public List<Student> select(Student student){
-    //    List<Student> studentList = studentMapper.selectAll(student);
-    //    return studentList;
-    //}
-    //public void adds(Student student){
-    //    studentMapper.insert(student);
-    //}
 
     public void deleteById(Integer id){
         studentMapper.deleteByID(id);
@@ -68,7 +61,7 @@ public class StudentService {
 
     public PageInfo<Student> selectPage(Integer pageNum,Integer pageSize,Student student) {
         PageHelper.startPage(pageNum,pageSize);
-        List<Student> studentList=studentMapper.selectAll();
+        List<Student> studentList=studentMapper.selectAll(student);
         return PageInfo.of(studentList);
     }
 }

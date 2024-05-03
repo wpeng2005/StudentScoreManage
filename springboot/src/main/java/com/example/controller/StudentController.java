@@ -16,7 +16,7 @@ public class StudentController {
     private StudentService studentService;
     @GetMapping("/selectPage")
     public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
-                             @RequestParam(defaultValue = "10") Integer pageSize,
+                             @RequestParam(defaultValue = "5") Integer pageSize,
                              Student student){
         PageInfo<Student> pageInfo = studentService.selectPage(pageNum,pageSize,student);
         return Result.success(pageInfo);
