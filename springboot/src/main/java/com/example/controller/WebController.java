@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.example.common.Result;
 import com.example.common.RoleEnum;
 import com.example.entity.Account;
@@ -43,6 +44,19 @@ public class WebController {
             return Result.error("角色错误");
         }
         return Result.success(dbAccount);
+    }
+
+    /*
+     * 注册接口
+     * */
+    @PostMapping("/register")
+    public Result register(@RequestBody Account account){
+        //进行注册校验
+        if(ObjectUtil.isEmpty(account.getUsername())||ObjectUtil.isEmpty(account.getPassword())){
+            return Result.error("账号密码必填");
+        }
+        studentService.register(account);
+        return Result.success();
     }
 
 }

@@ -19,7 +19,7 @@
         <el-button type="primary" style="width: 100%" @click="login">登录</el-button>
         </el-form-item>
         </el-form>
-      <div style="margin-top: 30px;text-align: center">
+      <div style="margin-top: 30px;text-align: right">
         还没有账号?请<a href="/register">注册</a>
       </div>
     </div>

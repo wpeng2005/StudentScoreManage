@@ -1,5 +1,7 @@
 package com.example.service;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.example.common.RoleEnum;
 import com.example.entity.Account;
 import com.example.entity.Course;
 import com.example.entity.Student;
@@ -31,7 +33,7 @@ public class StudentService {
         List<Student> studentList = studentMapper.selectAll(student);
         return studentList;
     }
-    public void add(Student student){
+    public void adds(Student student){
         studentMapper.insert(student);
     }
 
@@ -42,5 +44,22 @@ public class StudentService {
         studentMapper.updateById(student);
     }
 
-
+    //注册功能
+    public void register(Account account) {
+        Student student = new Student();
+        student.setUsername(account.getUsername());  //账号
+        student.setPassword(account.getPassword());  //属性
+        this.add(student);//调用下方的add
+    }
+    private void add(Student student){
+        Student dbstudent = studentMapper.selectByUsername(student.getUsername());
+        if(dbstudent!=null){//已经有同名账号
+            throw new CustomException("账号已存在");
+        }
+        if(ObjectUtil.isEmpty(student.getName())){
+            student.setName(student.getUsername());
+        }
+        student.setRole(RoleEnum.STUDENT.name());
+        studentMapper.insert(student);
+    }
 }

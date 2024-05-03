@@ -9,10 +9,10 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 public interface StudentMapper {
-    @Select("select * from student.studnt where username=#{username}")
+    @Select("select * from student.student where username=#{username}")
     Student selectByUsername(String username);
 
-    @Select("select * from student.studnt where name like concat('%',#{name},'%') and username like concat('%',#{username},'%')")
+    @Select("select * from student.student where name like concat('%',#{name},'%') and username like concat('%',#{username},'%')")
     List<Student> selectAll(Student student);
 
     @Insert("insert into student.student(username,password,name,phone,email,birth,avatar,sex,role) values " +
