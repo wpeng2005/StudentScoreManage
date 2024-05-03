@@ -7,7 +7,10 @@ import com.example.entity.Course;
 import com.example.entity.Student;
 import com.example.exception.CustomException;
 import com.example.mapper.StudentMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -29,13 +32,13 @@ public class StudentService {
         //两个条件都满足，说明登录成功
         return dbStudent;
     }
-    public List<Student> select(Student student){
-        List<Student> studentList = studentMapper.selectAll(student);
-        return studentList;
-    }
-    public void adds(Student student){
-        studentMapper.insert(student);
-    }
+    //public List<Student> select(Student student){
+    //    List<Student> studentList = studentMapper.selectAll(student);
+    //    return studentList;
+    //}
+    //public void adds(Student student){
+    //    studentMapper.insert(student);
+    //}
 
     public void deleteById(Integer id){
         studentMapper.deleteByID(id);
@@ -51,7 +54,7 @@ public class StudentService {
         student.setPassword(account.getPassword());  //属性
         this.add(student);//调用下方的add
     }
-    private void add(Student student){
+    public void add(Student student){
         Student dbstudent = studentMapper.selectByUsername(student.getUsername());
         if(dbstudent!=null){//已经有同名账号
             throw new CustomException("账号已存在");
@@ -61,5 +64,11 @@ public class StudentService {
         }
         student.setRole(RoleEnum.STUDENT.name());
         studentMapper.insert(student);
+    }
+
+    public PageInfo<Student> selectPage(Integer pageNum,Integer pageSize,Student student) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Student> studentList=studentMapper.selectAll();
+        return PageInfo.of(studentList);
     }
 }

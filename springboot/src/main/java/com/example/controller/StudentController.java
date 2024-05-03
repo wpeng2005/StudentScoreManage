@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.common.Result;
 import com.example.entity.Student;
 import com.example.service.StudentService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -13,15 +14,17 @@ import java.util.List;
 public class StudentController {
     @Resource
     private StudentService studentService;
-    @GetMapping("/select")
-    public Result selectStudent(Student student){
-        List<Student> studentList = studentService.select(student);
-        return Result.success(studentList);
+    @GetMapping("/selectPage")
+    public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
+                             @RequestParam(defaultValue = "10") Integer pageSize,
+                             Student student){
+        PageInfo<Student> pageInfo = studentService.selectPage(pageNum,pageSize,student);
+        return Result.success(pageInfo);
     }
 
-    @PostMapping("/insert")
-    public Result insert(@RequestBody Student student){
-        studentService.adds(student);
+    @PostMapping("/add")
+    public Result add(@RequestBody Student student){
+        studentService.add(student);
         return Result.success();
     }
 
