@@ -21,11 +21,23 @@ public class GradeController {
         return Result.success();
     }
 
+    //更新
+    @PutMapping("/update")
+    public Result update(@RequestBody Grade grade){
+       gradeService.updateById(grade);
+        return Result.success();
+    }
+
     @GetMapping("/selectPage")
     public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
                              @RequestParam(defaultValue = "5") Integer pageSize,
                              Grade grade){
         PageInfo<Grade> pageInfo = gradeService.selectPage(pageNum,pageSize,grade);
         return Result.success(pageInfo);
+    }
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable Integer id){
+       gradeService.deleteById(id);
+        return Result.success();
     }
 }

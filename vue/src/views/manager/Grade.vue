@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="card" style="margin-bottom: 10px">
-      <el-input style="width: 260px;margin-right: 10px" placeholder="请输入课程名称查询" :prefix-icon="Search" v-model="data.name"/>
-      <el-input style="width: 260px;margin-right: 10px" placeholder="请输入课程编号查询" :prefix-icon="Search" v-model="data.no"/>
+      <el-input style="width: 260px;margin-right: 10px" placeholder="请输入课程名称查询" :prefix-icon="Search" v-model="data.courseName"/>
+      <el-input style="width: 260px;margin-right: 10px" placeholder="请输入学生名称查询" :prefix-icon="Search" v-model="data.studentName"/>
       <el-button type="primary" style="margin-left: 10px" @click="load">查询</el-button>
       <el-button type="info" @click="reset">重置</el-button>
     </div>
@@ -10,14 +10,18 @@
       <div>
         <el-table :data="data.tableData" style="width: 100%">
           <el-table-column prop="id" label="序号" width="70"/>
-          <el-table-column prop="name" label="课程名称"/>
-          <el-table-column prop="no" label="课程编号"/>
+          <el-table-column prop="courseName" label="课程名称"/>
           <el-table-column prop="studentName" label="学生名称"/>
+          <el-table-column prop="score" label="分数"/>
+          <el-table-column prop="comment" label="评语"/>
+          <el-table-column prop="feedback" label="反馈"/>
 
           <el-table-column width="180" label="操作">
             <template #default="scope">
-                <el-button type="primary" @click="addGrade(scope.row)"  v-if="data.user.role==='ADMIN'">评分</el-button>
-                <el-button type="danger" @click="del(scope.row.id)">退课</el-button>
+                <el-button type="primary" @click="handleEdit(scope.row)"  v-if="data.user.role==='STUDENT'">反馈</el-button>
+                <el-button type="primary" @click="handleEdit(scope.row)" v-if="data.user.role==='ADMIN'">编辑</el-button>
+                <el-button type="danger" @click="del(scope.row.id)" v-if="data.user.role==='ADMIN'">退课</el-button>
+
 
             </template>
           </el-table-column>
@@ -30,16 +34,16 @@
                      background layout="prev, pager, next" :total="data.total"/>
     </div>
 
-      <el-dialog width="35%" title="成绩信息" v-model="data.formVisible">
-          <el-form :model="data.gradeForm" label-width="100px" label-position="right" style="padding-right: 40px">
-              <el-form-item label="课程名称" >
-                  <el-input v-model="data.gradeForm.name" autocomplete="off" disabled/>
+      <el-dialog width="35%" title="反馈信息" v-model="data.formVisible">
+          <el-form :model="data.form" label-width="100px" label-position="right" style="padding-right: 40px">
+              <el-form-item label="评分" v-if="data.user.role==='ADMIN'">
+                  <el-input v-model="data.form.score" autocomplete="off"/>
               </el-form-item>
-              <el-form-item label="分数" >
-                  <el-input v-model="data.gradeForm.score" autocomplete="off"/>
+              <el-form-item label="评语" v-if="data.user.role==='ADMIN'" >
+                  <el-input v-model="data.form.comment" type="textarea" autocomplete="off"/>
               </el-form-item>
-              <el-form-item  label="评语" >
-                  <el-input v-model="data.gradeForm.comment" autocomplete="off" type="textarea" />
+              <el-form-item label="反馈" v-if="data.user.role==='STUDENT'">
+                  <el-input v-model="data.form.feedback" type="textarea" autocomplete="off"/>
               </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer" style="text-align: right;margin-top: 50px">
@@ -57,11 +61,11 @@ import request from "@/utils/request";
 import {ElMessage, ElMessageBox} from "element-plus";
 
 const data=reactive({
-  name:'',
-  no:'',
+  courseName:'',
+  studentName:'',
   tableData:[],
    total:0,
-    gradeForm:{},
+    form:{},
     formVisible:false,
     user:JSON.parse(localStorage.getItem('student-user')||'{}'),
     pageSize:5,   //每页的个数
@@ -71,14 +75,14 @@ const data=reactive({
 const load=()=>{
     let params={pageNum:data.pageNum,
         pageSize:data.pageSize,
-        name:data.name,
-        no:data.no
+        courseName:data.courseName,
+        studentName:data.studentName
     }
     if(data.user.role==='STUDENT'){//如果当前登录的是学生，那就查询自己的选课记录
         params.studentId=data.user.id
     }
 
-    request.get("/studentCourse/selectPage",{
+    request.get("/grade/selectPage",{
         params:params
     }).then(res=>{
         data.tableData=res.data?.list||[]
@@ -95,13 +99,13 @@ const handleCurrentChange=()=>{
 }
 
 const reset=()=>{
-    data.name=''
-    data.no=''
+    data.courseName=''
+    data.studentName=''
     load()
 }
 const del=(id)=>{
     ElMessageBox.confirm('删除数据后无法恢复，您确认删除吗？','删除确认',{type:'warning'}).then(res=>{
-        request.delete("/studentCourse/delete/"+id).then(res=>{
+        request.delete("/grade/delete/"+id).then(res=>{
             if(res.code==='200'){
                 load()
                 ElMessage.success("操作成功")
@@ -112,15 +116,14 @@ const del=(id)=>{
     }).catch(res=>{})
 }
 //打分
-const addGrade=(row)=>{
+const handleEdit=(row)=>{
    //当前页面弹窗
+
+    data.form=JSON.parse(JSON.stringify(row))//拷贝行数据到表单对象
     data.formVisible=true
-    data.gradeForm.name=row.name
-    data.gradeForm.courseId=row.courseId
-    data.gradeForm.studentId=row.studentId
 }
 const save=()=>{
-    request.post('/grade/add',data.gradeForm).then(res=>{
+    request.put('/grade/update',data.form).then(res=>{
         if(res.code==='200'){
             load()  //重新获取数据
             data.formVisible=false //关闭弹窗

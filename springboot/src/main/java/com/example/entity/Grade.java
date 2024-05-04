@@ -14,5 +14,7 @@ public class Grade {
     private double score;
     private String comment;
     private String feedback;
+    private String studentName;
+    private String courseName;
 
 }
