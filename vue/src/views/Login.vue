@@ -2,7 +2,9 @@
   <div>
   <div class="login-container"  >
     <div style="width: 350px" class="login-box">
-      <div style="font-weight: bold;font-size: 24px;text-align: center;margin-bottom: 30px">登录</div>
+      <div style="font-weight: bold;font-size: 24px;text-align: center;margin-bottom: 30px">
+          <img src="src/assets/imgs/school.jpg" width="10px" height="10px">
+      </div>
       <el-form  :model="data.form"  :rules="rules" ref="formRef">
         <el-form-item prop="username">
           <el-input prefix-icon="User" v-model="data.form.username" placeholder="请输入账号"/>
