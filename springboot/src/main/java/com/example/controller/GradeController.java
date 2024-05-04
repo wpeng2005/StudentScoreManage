@@ -1,12 +1,11 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.entity.Course;
 import com.example.entity.Grade;
 import com.example.service.GradeService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.github.pagehelper.PageInfo;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -20,5 +19,13 @@ public class GradeController {
     public Result add(@RequestBody Grade grade){
         gradeService.add(grade);
         return Result.success();
+    }
+
+    @GetMapping("/selectPage")
+    public Result selectPage(@RequestParam(defaultValue = "1") Integer pageNum,
+                             @RequestParam(defaultValue = "5") Integer pageSize,
+                             Grade grade){
+        PageInfo<Grade> pageInfo = gradeService.selectPage(pageNum,pageSize,grade);
+        return Result.success(pageInfo);
     }
 }

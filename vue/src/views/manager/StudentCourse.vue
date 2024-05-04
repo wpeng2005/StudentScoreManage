@@ -29,6 +29,25 @@
                      @current-change="handleCurrentChange"
                      background layout="prev, pager, next" :total="data.total"/>
     </div>
+
+      <el-dialog width="35%" title="成绩信息" v-model="data.formVisible">
+          <el-form :model="data.form" label-width="100px" label-position="right" style="padding-right: 40px">
+              <el-form-item label="课程名称" >
+                  <el-input v-model="data.gradeForm.name" autocomplete="off" disabled/>
+              </el-form-item>
+              <el-form-item label="分数" >
+                  <el-input v-model="data.gradeForm.score" autocomplete="off"/>
+              </el-form-item>
+              <el-form-item label="评语" >
+                  <el-input v-model="data.gradeForm.comment" autocomplete="off"/>
+              </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer" style="text-align: right;margin-top: 50px">
+              <el-button @click="data.formVisible = false">取 消</el-button>
+              <el-button type="primary" @click="save">保 存</el-button>
+          </div>
+      </el-dialog>
+
   </div>
 </template>
 <script setup>
@@ -42,6 +61,8 @@ const data=reactive({
   no:'',
   tableData:[],
    total:0,
+    gradeForm:{},
+    formVisible:false,
     user:JSON.parse(localStorage.getItem('student-user')||'{}'),
     pageSize:5,   //每页的个数
     pageNum:1     //当前的页码
@@ -91,8 +112,22 @@ const del=(id)=>{
     }).catch(res=>{})
 }
 //打分
-const addGrade=()=>{
+const addGrade=(row)=>{
    //当前页面弹窗
-
+    data.formVisible=true
+    data.gradeForm.name=row.name
+    data.gradeForm.courseId=row.courseId
+    data.gradeForm.studentId=row.studentId
+}
+const save=()=>{
+    request.post('/grade/add',data.gradeForm).then(res=>{
+        if(res.code==='200'){
+            load()  //重新获取数据
+            data.formVisible=false //关闭弹窗
+            ElMessage.success("操作成功")
+        }else {
+            ElMessage.error(res.msg)
+        }
+    })
 }
 </script>
