@@ -3,7 +3,8 @@
   <div class="login-container"  >
     <div style="width: 350px" class="login-box">
       <div style="font-weight: bold;font-size: 24px;text-align: center;margin-bottom: 30px">
-          <img src="src/assets/imgs/school.jpg" width="10px" height="10px">
+          <img src="src/assets/imgs/school.jpg" style="width: 100px;height: 100px">
+            <div>安徽理工大学</div>
       </div>
       <el-form  :model="data.form"  :rules="rules" ref="formRef">
         <el-form-item prop="username">
