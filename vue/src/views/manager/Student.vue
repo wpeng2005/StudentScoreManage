@@ -24,8 +24,8 @@
 
             <el-table-column width="180" label="操作">
             <template #default="scope">
-                <el-button type="primary" plain @click="handleEdit(scope.row)">编辑</el-button>
-                <el-button type="danger" plain @click="del(scope.row.id)">删除</el-button>
+                <el-button type="primary"  @click="handleEdit(scope.row)">编辑</el-button>
+                <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

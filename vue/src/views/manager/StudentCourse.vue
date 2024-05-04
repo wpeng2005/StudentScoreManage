@@ -12,6 +12,7 @@
           <el-table-column prop="id" label="序号" width="70"/>
           <el-table-column prop="name" label="课程名称"/>
           <el-table-column prop="no" label="课程编号"/>
+          <el-table-column prop="studentName" label="学生名称"/>
 
           <el-table-column width="180" label="操作">
             <template #default="scope">
@@ -54,7 +55,7 @@ const load=()=>{
         params.studentId=data.user.id
     }
 
-    request.get("/StudentCourse/selectPage",{
+    request.get("/studentCourse/selectPage",{
         params:params
     }).then(res=>{
         data.tableData=res.data?.list||[]

@@ -13,6 +13,6 @@ public interface StudentCourseMapper {
     @Select("select * from student.student_course where student_id=#{studentId} and course_id=#{courseId} ")
     StudentCourse selectByCondition(StudentCourse studentCourse);
 
-    @Select("select * from student.student_course where name like concat('%',#{name},'%') and no like concat('%',#{no},'%') and student_id=#{studentId}")
+    //@Select("select * from student.student_course where name like concat('%',#{name},'%') and no like concat('%',#{no},'%') and student_id=#{studentId}")
     List<StudentCourse> selectAll(StudentCourse studentCourse);
 }

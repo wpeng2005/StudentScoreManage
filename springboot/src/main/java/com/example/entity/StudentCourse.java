@@ -14,5 +14,8 @@ public class StudentCourse {
     private Integer studentId;
     private Integer courseId;
 
+    //用来做关联查询
+    private String studentName;
+
 
 }
