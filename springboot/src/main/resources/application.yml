@@ -15,7 +15,9 @@ spring:
 
 # 配置mybatis实体和xml映射
 mybatis:
+  type-aliases-package: com.example.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+
 ip: localhost

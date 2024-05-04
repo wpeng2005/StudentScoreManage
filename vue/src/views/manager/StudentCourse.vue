@@ -50,7 +50,10 @@ const load=()=>{
         name:data.name,
         no:data.no
     }
-    if(data.student.role==='ADMIN')
+    if(data.user.role==='STUDENT'){//如果当前登录的是学生，那就查询自己的选课记录
+        params.studentId=data.user.id
+    }
+
     request.get("/StudentCourse/selectPage",{
         params:params
     }).then(res=>{
