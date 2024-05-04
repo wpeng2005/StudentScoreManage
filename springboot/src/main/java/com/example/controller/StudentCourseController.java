@@ -29,4 +29,10 @@ public class StudentCourseController {
         studentCourseService.add(studentCourse);
         return Result.success();
     }
+
+    @DeleteMapping("/delete/{id}")
+    public Result delete(@PathVariable Integer id){
+        studentCourseService.deleteById(id);
+        return Result.success();
+    }
 }

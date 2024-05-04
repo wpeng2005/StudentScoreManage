@@ -28,4 +28,8 @@ public class StudentCourseService {
         List<StudentCourse> list= studentCourseMapper.selectAll(studentCourse);
         return PageInfo.of(list);
     }
+
+    public void deleteById(Integer id) {
+        studentCourseMapper.deleteById(id);
+    }
 }

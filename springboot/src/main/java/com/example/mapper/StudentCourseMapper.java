@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.example.entity.StudentCourse;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
@@ -15,4 +16,6 @@ public interface StudentCourseMapper {
 
     //@Select("select * from student.student_course where name like concat('%',#{name},'%') and no like concat('%',#{no},'%') and student_id=#{studentId}")
     List<StudentCourse> selectAll(StudentCourse studentCourse);
+    @Delete("delete from student.student_course where id=#{id}")
+    void deleteById(Integer id);
 }

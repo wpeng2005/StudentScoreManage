@@ -16,7 +16,9 @@
 
           <el-table-column width="180" label="操作">
             <template #default="scope">
+                <el-button type="primary" @click="addGrade(scope.row)"  v-if="data.user.role==='ADMIN'">评分</el-button>
                 <el-button type="danger" @click="del(scope.row.id)">退课</el-button>
+
             </template>
           </el-table-column>
         </el-table>
@@ -77,6 +79,20 @@ const reset=()=>{
     load()
 }
 const del=(id)=>{
-    request.delete("")
+    ElMessageBox.confirm('删除数据后无法恢复，您确认删除吗？','删除确认',{type:'warning'}).then(res=>{
+        request.delete("/studentCourse/delete/"+id).then(res=>{
+            if(res.code==='200'){
+                load()
+                ElMessage.success("操作成功")
+            }else{
+                ElMessage.error(res.msg)
+            }
+        })
+    }).catch(res=>{})
+}
+//打分
+const addGrade=()=>{
+   //当前页面弹窗
+
 }
 </script>
